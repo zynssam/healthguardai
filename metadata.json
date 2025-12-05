@@ -1,0 +1,5 @@
+{
+  "name": "HealthGuard AI",
+  "description": "An AI-driven public health chatbot for disease awareness, symptom analysis, and verified health information dissemination.",
+  "requestFramePermissions": []
+}
