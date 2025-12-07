@@ -12,8 +12,8 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { Activity, MapPin, AlertCircle, TrendingUp, Calendar } from 'lucide-react';
-import { MOCK_QUERY_STATS, MOCK_RISK_DISTRIBUTION } from '../constants';
+import { Activity, MapPin, AlertCircle, TrendingUp, Calendar, ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { MOCK_QUERY_STATS, MOCK_RISK_DISTRIBUTION, LOCAL_OUTBREAKS } from '../constants';
 
 const COLORS = ['#0d9488', '#14b8a6', '#2dd4bf', '#5eead4', '#99f6e4']; // Teal Palette
 const PIE_COLORS = ['#10b981', '#f59e0b', '#ef4444']; // Green, Yellow, Red for Risk
@@ -54,6 +54,40 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Local Outbreak Tracker (NEW WIDGET) */}
+      <div className="mb-8 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+           <h3 className="text-lg font-bold text-slate-900 flex items-center">
+              <MapPin className="w-5 h-5 text-teal-600 mr-2" />
+              Local Outbreak Intelligence
+           </h3>
+           <span className="text-xs font-semibold px-2 py-1 bg-teal-100 text-teal-800 rounded">Live Data</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+           {LOCAL_OUTBREAKS.map((outbreak, idx) => (
+             <div key={idx} className="p-4 hover:bg-slate-50 transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                   <span className="text-xs font-bold text-slate-400 uppercase">{outbreak.city}</span>
+                   {outbreak.trend === 'rising' ? <ArrowUpRight className="w-4 h-4 text-red-500"/> : 
+                    outbreak.trend === 'falling' ? <ArrowDownRight className="w-4 h-4 text-green-500"/> :
+                    <Minus className="w-4 h-4 text-slate-400"/>}
+                </div>
+                <h4 className="font-bold text-slate-900 text-sm mb-1">{outbreak.diseaseName}</h4>
+                <div className="flex justify-between items-end">
+                   <span className="text-2xl font-semibold text-slate-700">{outbreak.activeCases}</span>
+                   <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                       outbreak.riskLevel === 'high' ? 'bg-red-100 text-red-700' :
+                       outbreak.riskLevel === 'moderate' ? 'bg-amber-100 text-amber-700' :
+                       'bg-green-100 text-green-700'
+                   }`}>
+                       {outbreak.riskLevel.toUpperCase()}
+                   </span>
+                </div>
+             </div>
+           ))}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
